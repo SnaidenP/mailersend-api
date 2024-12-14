@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: 🛠️ CI Pipeline
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,29 +17,35 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
   build:
-    name: Build and SonarQube Analysis
+    name: 🚀 Build and 🔍 SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: 📂 Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Necesario para relevancia en SonarQube
 
-      - name: Setup Dart
+      - name: 🎯 Setup Dart
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{inputs.dart_sdk}}
+          sdk: ${{ inputs.dart_sdk }}
 
-      - name: Install Dependencies
+      - name: 📦 Install Dependencies
         run: dart pub get
 
-      - name: Static Analysis
+      - name: 🔍 Static Analysis
         run: dart analyze
 
-      - name: Run Tests
-        run: dart test
+      - name: 🧪 Run Tests
+        run: |
+          # example for a Flutter project
+          dart test --coverage
+          
+          # example for a Dart project
+          dart pub global activate coverage
+          dart pub global run coverage:test_with_coverage
 
-      - name: SonarQube Scan
+      - name: 📊 SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
