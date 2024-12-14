@@ -17,14 +17,27 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
+    name: Build and SonarQube Analysis
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Necesario para relevancia en SonarQube
 
-      - name: Run Dart Package Workflow
-        run: dart pub get && dart analyze && dart test
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v2
+        with:
+          sdk: stable  # Instala la versión estable de Dart
+
+      - name: Install Dependencies
+        run: dart pub get
+
+      - name: Static Analysis
+        run: dart analyze
+
+      - name: Run Tests
+        run: dart test
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
