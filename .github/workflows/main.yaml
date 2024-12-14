@@ -18,20 +18,13 @@ jobs:
 
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
-
-  pana:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
-
-  sonarqube:
-    name: SonarQube Analysis
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better relevancy of analysis
+          fetch-depth: 0  # Necesario para relevancia en SonarQube
 
-      - name: Install Dependencies
-        run: dart pub get
+      - name: Run Dart Package Workflow
+        run: dart pub get && dart analyze && dart test
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
@@ -39,3 +32,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  pana:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
