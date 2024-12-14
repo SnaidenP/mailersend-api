@@ -26,9 +26,9 @@ jobs:
           fetch-depth: 0  # Necesario para relevancia en SonarQube
 
       - name: Setup Dart
-        uses: dart-lang/setup-dart@v2
+        uses: dart-lang/setup-dart@v1
         with:
-          sdk: stable  # Instala la versión estable de Dart
+          sdk: ${{inputs.dart_sdk}}
 
       - name: Install Dependencies
         run: dart pub get
